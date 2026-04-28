@@ -1,0 +1,27 @@
+{
+  "name": "venom-shield",
+  "version": "1.0.0",
+  "description": "Prompt injection protection for Claude Code agents — Venom Protocol",
+  "main": "index.js",
+  "bin": {
+    "venom-shield": "./bin/venom-shield.js"
+  },
+  "scripts": {
+    "test": "node test/scan.test.js"
+  },
+  "keywords": [
+    "claude-code",
+    "prompt-injection",
+    "ai-security",
+    "mcp",
+    "llm-security",
+    "venom-protocol"
+  ],
+  "author": "Sa1bou <sinan-saibou@web.de>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sa1bou/venom-shield.git"
+  },
+  "homepage": "https://github.com/Sa1bou/venom-shield#readme"
+}
