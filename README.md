@@ -4,6 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-orange.svg)](SKILL.md)
+[![Powered by Magika](https://img.shields.io/badge/Powered%20by-Google%20Magika-blue.svg)](https://github.com/google/magika)
 
 ---
 
@@ -57,6 +58,89 @@ Resume only when user types "proceed" or "ignore venom".
 
 ---
 
+## Magika Integration — File Type Defense
+
+Venom Shield now integrates **Google Magika** (AI-powered file type detection) as a second defense layer.
+
+| Layer | Tool | Protects Against |
+|-------|------|-----------------|
+| Layer 1 | Venom Shield | Prompt injection in text/content |
+| Layer 2 | Google Magika | Disguised malicious files |
+
+Before Claude Code reads any file, Magika verifies the real file type. A `.md` file that's actually an ELF executable? **Blocked.**
+
+```
+[VENOM+MAGIKA] ⚠️ DANGEROUS FILE DETECTED
+  File : ./setup.md
+  Type : elf (detected by Magika)
+  Ext  : .md
+  Action: Read blocked. This file may be malicious.
+```
+
+### Install Magika hook
+
+```bash
+# Install Magika
+brew install magika
+
+# Copy hook to Claude Code
+mkdir -p ~/.claude/hooks
+cp hooks/magika-check.sh ~/.claude/hooks/
+chmod +x ~/.claude/hooks/magika-check.sh
+```
+
+Add to `~/.claude/settings.json` under `hooks.PreToolUse`:
+
+```json
+{
+  "matcher": "Read",
+  "hooks": [{
+    "type": "command",
+    "command": "bash ~/.claude/hooks/magika-check.sh",
+    "timeout": 10
+  }]
+}
+```
+
+---
+
+## Magika Integration — File Type Defense
+
+Venom Shield integrates **Google Magika** (AI-powered file type detection) as a second defense layer.
+
+| Layer | Tool | Protects Against |
+|-------|------|-----------------|
+| Layer 1 | Venom Shield | Prompt injection in text/content |
+| Layer 2 | Google Magika | Disguised malicious files |
+
+A `.md` file that's secretly an ELF executable? **Blocked before Claude reads it.**
+
+```
+[VENOM+MAGIKA] ⚠️ DANGEROUS FILE DETECTED
+  File : ./setup.md
+  Type : elf (detected by Magika)
+  Action: Read blocked.
+```
+
+### Setup
+
+```bash
+brew install magika
+mkdir -p ~/.claude/hooks
+cp hooks/magika-check.sh ~/.claude/hooks/
+chmod +x ~/.claude/hooks/magika-check.sh
+```
+
+Add to `~/.claude/settings.json` under `hooks.PreToolUse`:
+```json
+{
+  "matcher": "Read",
+  "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/magika-check.sh", "timeout": 10 }]
+}
+```
+
+---
+
 ## MCP Pre-Install Scanner
 
 Before running `claude mcp add <server>`, use Venom Shield to audit the repo:
@@ -77,7 +161,8 @@ Venom is a Marvel symbiote that bonds with and attempts to control its host — 
 
 ## Roadmap
 
-- [ ] Automated pre-read hook (fires before every external fetch)
+- [x] Automated pre-read hook (fires before every Read)
+- [x] Google Magika file type detection
 - [ ] MCP repo auditor CLI
 - [ ] Multi-agent chain protection
 - [ ] VS Code extension
