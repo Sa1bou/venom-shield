@@ -1,0 +1,34 @@
+name: 🛡️ Venom Shield Scan
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  venom-scan:
+    name: Prompt Injection Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Venom Shield
+        run: npm install -g https://github.com/Sa1bou/venom-shield
+
+      - name: Run Scan
+        run: venom-shield scan-repo . --report
+
+      - name: Upload Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: venom-report
+          path: venom-report.md
